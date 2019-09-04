@@ -1,10 +1,18 @@
 #!/bin/bash
 #=============================================================================
 #
-# FILE: bitwig-fedora.sh 
+# FILE: bitwig-fedora.sh
 #
 # USAGE: bitwig-fedora.sh [-i|-u] [-h]
 #
+# DESCRIPTION: This script automates the Bitwig Studio installation process on
+# Fedora 28.
+# The default starting directory is the current directory.
+# Do not descend directories on other filesystems.
+#
+# OPTIONS: See function - usage - below.
+# REQUIREMENTS: Fedora 28 Workstation, Bitwig Studio 2.4
+# NOTES: ---
 #=============================================================================
 
 ROOT_UID=0
@@ -14,6 +22,7 @@ DEFAULT_FILENAME="bitwig-studio-$VERSION.deb"
 DEFAULT_URL="https://downloads.bitwig.com/stable/$VERSION/$DEFAULT_FILENAME"
 INSTALL_LOG="/opt/bitwig-studio/.$DEFAULT_FILENAME.log"
 SAFE_FILE_REMOVE="^/\./usr/share/*|^/\./opt/bitwig-studio/*"
+SHA256="dae03f075fc198aa9a0304a3eda2a2cbbd78c02bfd17ec9d50259a090b42857e"
 OS_VERSION="Fedora release 30 (Thirty)"
 
 
@@ -43,6 +52,14 @@ function download_bitwig()
   else
     echo "Package $DEFAULT_FILENAME does not exist. Initializing the download."
     wget $DEFAULT_URL
+  fi
+
+  echo "Verifying the package checksum. Please wait."
+  if [ "$(sha256sum $DEFAULT_FILENAME | awk {'print $1'})" != "$SHA256" ] ; then
+    echo "The checksum doesn't match. Please remove or download the package again."
+    exit 1
+  else
+    echo "Package checksum successfully validated."
   fi
 }
 
