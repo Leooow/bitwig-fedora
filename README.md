@@ -3,6 +3,8 @@
 A script that installs Bitwig Studio on Fedora.
 I forked this from digiberk who forked it from the original creator because it hasn't been updated for the latest release of Fedora.
 
+It is now for version 3.0.2 under Fedora 30
+
 ## Installation
 
 ```bash
